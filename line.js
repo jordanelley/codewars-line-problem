@@ -1,6 +1,8 @@
 const line = (grid) => {
     //todo check for unused characters
     //todo check + is a corner
+    //todo add padding around edges so there is no out of range
+    //todo remove used chars so it doesnt go back to the same square
 
     const numOfStartLocations=2;
     const startLocations = findItemCoordinates('X',grid);
