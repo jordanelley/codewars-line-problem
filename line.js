@@ -1,30 +1,19 @@
 const line = (grid) => {
-    const surroundingCharsAllowedForStartPoint = {
-        up: ['|','+','X'],
-        down: ['|','+','X'],
-        left: ['-','+','X'],
-        right: ['-','+','X']
-    }
-
+    //todo check for unused characters
+    //todo check + is a corner
 
     const numOfStartLocations=2;
     const startLocations = findItemCoordinates('X',grid);
     if(startLocations.length!==numOfStartLocations)
         return false;
-    for(let startPoint =0; startPoint<numOfStartLocations; startPoint++){
+    for(let startPoint =0; startPoint<numOfStartLocations; startPoint++){ //loops twice to check both directions
         let X = startLocations[startPoint][0];
         let Y = startLocations[startPoint][1];
-        // let surroundingSquares=getSurroundingSquares(X,Y,grid);
-        // for (const [relativeDirectionToCurrentSquare, currentNewSymbol] of Object.entries(surroundingSquares)) {
-        //     const allowedSymbols = surroundingCharsAllowedForStartPoint[relativeDirectionToCurrentSquare];
-        //     if(allowedSymbols.includes(currentNewSymbol)){
-        //         continuePath(X,Y,currentNewSymbol,grid);
-        //     }
-        // }
 
-
-
-
+        const result = continuePath(X,Y,grid)
+        if(result){
+            return true;
+        }
     }
     return false;
 }
@@ -44,10 +33,10 @@ const continuePath = (X, Y, grid) =>{
             right: []
         },
         '+':{
-            up: ['|','+','X'],
-            down: ['|','+','X'],
-            left: ['-','+','X'],
-            right: ['-','+','X']
+            up: ['|','+'],
+            down: ['|','+'],
+            left: ['-','+'],
+            right: ['-','+']
         },
         'X':{
             up: ['|','+','X'],
@@ -63,19 +52,22 @@ const continuePath = (X, Y, grid) =>{
         const symbol = grid[X][Y];
         const allowedSymbols = surroundingCharsAllowed[symbol][relativeDirectionToCurrentSquare];
         if(allowedSymbols.includes(currentSurroundingSymbol)){
+            if(currentSurroundingSymbol === 'X')
+                return true;
             const newCoordinates= getNewCoordinates(X,Y,relativeDirectionToCurrentSquare)
-            continuePath(newCoordinates.X,newCoordinates.Y,grid);
+            return continuePath(newCoordinates.X,newCoordinates.Y,grid);
         }
     }
+    return false;
 }
 
 const getNewCoordinates = (X,Y, direction) =>{
     //todo ignore negatives
     const coordinateMap = {
-        up: {X:X,Y:Y+1},
-        down: {X:X,Y:Y-1},
-        left: {X:X-1,Y:Y},
-        right: {X:X+1,Y:Y}
+        right: {X:X,Y:Y+1},
+        left: {X:X,Y:Y-1},
+        up: {X:X-1,Y:Y},
+        down: {X:X+1,Y:Y}
     }
     return coordinateMap[direction];
 }
@@ -83,10 +75,10 @@ const getNewCoordinates = (X,Y, direction) =>{
 const getSurroundingSquares = (X,Y,grid) => {
     //todo ignore negatives
     return {
-        up: grid[X][Y+1],
-        down: grid[X][Y-1],
-        left: grid[X-1][Y],
-        right: grid[X+1][Y],
+        right: grid[X][Y+1],
+        left: grid[X][Y-1],
+        up: grid[X-1][Y],
+        down: grid[X+1][Y],
     }
 }
 

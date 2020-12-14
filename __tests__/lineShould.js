@@ -1,6 +1,21 @@
 const line = require('../line');
 describe('tests',()=> {
+    test('straight line horizontal short', () => {
+        expect(line.line([
+            [' ', ' ', ' ', ' '],
+            [' ', 'X', 'X', ' '],
+            [' ', ' ', ' ', ' '],
+        ])).toBe(true);
+    });
+
     test('straight line horizontal', () => {
+        expect(line.line([
+            [' ', ' ', ' ', ' ',' '],
+            [' ', 'X', '-', 'X',' '],
+            [' ', ' ', ' ', ' ',' '],
+        ])).toBe(true);
+    });
+    test('straight line horizontal edge cases', () => {
         expect(line.line([
             [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
             ['X', '-', '-', '-', '-', '-', '-', '-', '-', '-', 'X'],
