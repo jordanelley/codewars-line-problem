@@ -1,7 +1,6 @@
 const line = (grid) => {
     //todo check for unused characters
     //todo check + is a corner
-    //todo remove used chars so it doesnt go back to the same square
 
     grid = addPadding(grid);
 
@@ -22,33 +21,7 @@ const line = (grid) => {
 }
 
 const continuePath = (X, Y, grid) =>{
-    const surroundingCharsAllowed = {  //todo put this somewhere else please
-        '-':{
-            up: [],
-            down: [],
-            left: ['-','+','X'],
-            right: ['-','+','X']
-        },
-        '|':{
-            up: ['|','+','X'],
-            down: ['|','+','X'],
-            left: [],
-            right: []
-        },
-        '+':{
-            up: ['|','+'],
-            down: ['|','+'],
-            left: ['-','+'],
-            right: ['-','+']
-        },
-        'X':{
-            up: ['|','+','X'],
-            down: ['|','+','X'],
-            left: ['-','+','X'],
-            right: ['-','+','X']
-        }
-    }
-
+    const surroundingCharsAllowed = getSurroundingCharsAllowed()
     const surroundingSquares = getSurroundingSquares(X,Y,grid)
 
     for (const [relativeDirectionToCurrentSquare, currentSurroundingSymbol] of Object.entries(surroundingSquares)) {
@@ -64,6 +37,33 @@ const continuePath = (X, Y, grid) =>{
     }
     return false;
 }
+
+const getSurroundingCharsAllowed = () => {return{
+    '-':{
+        up: [],
+            down: [],
+            left: ['-','+','X'],
+            right: ['-','+','X']
+    },
+    '|':{
+        up: ['|','+','X'],
+            down: ['|','+','X'],
+            left: [],
+            right: []
+    },
+    '+':{
+        up: ['|','+'],
+            down: ['|','+'],
+            left: ['-','+'],
+            right: ['-','+']
+    },
+    'X':{
+        up: ['|','+','X'],
+            down: ['|','+','X'],
+            left: ['-','+','X'],
+            right: ['-','+','X']
+    }
+}}
 
 const getNewCoordinates = (X,Y, direction) =>{
     const coordinateMap = {
@@ -81,7 +81,6 @@ const wipeCurrentSquare = (X,Y,grid) => {
 }
 
 const getSurroundingSquares = (X,Y,grid) => {
-    //todo ignore negatives
     return {
         right: grid[X][Y+1],
         left: grid[X][Y-1],

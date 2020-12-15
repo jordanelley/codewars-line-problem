@@ -16,6 +16,30 @@ describe('tests',()=> {
             [' ', ' ', ' ', ' ',' '],
         ])).toBe(true);
     });
+
+    test('straight line horizontal broken', () => {
+        expect(line.line([
+            [' ', ' ', ' ', ' ',' '],
+            [' ', 'X', ' ', 'X',' '],
+            [' ', ' ', ' ', ' ',' '],
+        ])).toBe(false);
+    });
+
+    test('straight line horizontal with + that doesnt turn', () => { //todo this test should be failing??
+        expect(line.line([
+            [' ', ' ', ' ', ' ',' '],
+            [' ', 'X', '+', 'X',' '],
+            [' ', ' ', ' ', ' ',' '],
+        ])).toBe(false);
+    });
+
+    test('straight line horizontal with random char', () => {
+        expect(line.line([
+            [' ', ' ', ' ', ' ',' '],
+            [' ', 'X', '-', 'X',' '],
+            [' ', ' ', '-', ' ',' '],
+        ])).toBe(false);
+    });
     test('straight line horizontal edge cases', () => {
         expect(line.line([
             [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
