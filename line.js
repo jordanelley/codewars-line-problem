@@ -1,8 +1,9 @@
 const line = (grid) => {
     //todo check for unused characters
     //todo check + is a corner
-    //todo add padding around edges so there is no out of range
     //todo remove used chars so it doesnt go back to the same square
+
+    grid = addPadding(grid);
 
     const numOfStartLocations=2;
     const startLocations = findItemCoordinates('X',grid);
@@ -64,7 +65,6 @@ const continuePath = (X, Y, grid) =>{
 }
 
 const getNewCoordinates = (X,Y, direction) =>{
-    //todo ignore negatives
     const coordinateMap = {
         right: {X:X,Y:Y+1},
         left: {X:X,Y:Y-1},
@@ -97,8 +97,24 @@ const findItemCoordinates = (item,grid) => {
 }
 
 const addPadding = (grid) => { //padding is added so the search does not go out of range
-    const numOfColumns = grid.length
     const numOfRows = grid.length > 0 ? grid[0].length : 0;
+
+    grid.unshift(createBlankColumn(numOfRows));
+    grid.push(createBlankColumn(numOfRows));
+
+    grid.forEach(column => {
+        column.unshift(' ');
+        column.push(' ');
+    })
+
     return grid;
 }
-module.exports ={line,findItemCoordinates,addPadding}
+
+const createBlankColumn = (rows)=>{
+    const column = []
+    for(let i =0;i<rows;i++){
+        column.push(' ');
+    }
+    return column
+}
+module.exports ={line,findItemCoordinates,addPadding,createBlankColumn}

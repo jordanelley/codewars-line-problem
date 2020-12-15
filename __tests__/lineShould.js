@@ -1,4 +1,5 @@
 const line = require('../line');
+//todo add a simple fail case
 describe('tests',()=> {
     test('straight line horizontal short', () => {
         expect(line.line([
