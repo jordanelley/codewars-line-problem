@@ -95,4 +95,10 @@ const findItemCoordinates = (item,grid) => {
     }
     return items;
 }
-module.exports ={line,findItemCoordinates}
+
+const addPadding = (grid) => { //padding is added so the search does not go out of range
+    const numOfColumns = grid.length
+    const numOfRows = grid.length > 0 ? grid[0].length : 0;
+    return grid;
+}
+module.exports ={line,findItemCoordinates,addPadding}
