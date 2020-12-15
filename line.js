@@ -22,7 +22,7 @@ const line = (grid) => {
 }
 
 const continuePath = (X, Y, grid) =>{
-    const surroundingCharsAllowed = {
+    const surroundingCharsAllowed = {  //todo put this somewhere else please
         '-':{
             up: [],
             down: [],
@@ -57,6 +57,7 @@ const continuePath = (X, Y, grid) =>{
         if(allowedSymbols.includes(currentSurroundingSymbol)){
             if(currentSurroundingSymbol === 'X')
                 return true;
+            grid = wipeCurrentSquare(X,Y,grid) //so it doesnt get reused
             const newCoordinates= getNewCoordinates(X,Y,relativeDirectionToCurrentSquare)
             return continuePath(newCoordinates.X,newCoordinates.Y,grid);
         }
@@ -72,6 +73,11 @@ const getNewCoordinates = (X,Y, direction) =>{
         down: {X:X+1,Y:Y}
     }
     return coordinateMap[direction];
+}
+
+const wipeCurrentSquare = (X,Y,grid) => {
+    grid[X][Y]= '^'
+    return grid;
 }
 
 const getSurroundingSquares = (X,Y,grid) => {
