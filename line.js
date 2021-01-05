@@ -52,10 +52,10 @@ const getSurroundingCharsAllowed = () => {return{
             right: []
     },
     '+':{
-        up: ['|','+'],
-            down: ['|','+'],
-            left: ['-','+'],
-            right: ['-','+']
+        up: ['|','+','X'],
+            down: ['|','+','X'],
+            left: ['-','+','X'],
+            right: ['-','+','X']
     },
     'X':{
         up: ['|','+','X'],
