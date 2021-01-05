@@ -1,5 +1,4 @@
 const line = require('../line');
-//todo add a simple fail case
 describe('tests',()=> {
     test('straight line horizontal short', () => {
         expect(line.line([
@@ -25,7 +24,7 @@ describe('tests',()=> {
         ])).toBe(false);
     });
 
-    test('straight line horizontal with + that doesnt turn', () => { //todo this test should be failing??
+    test('straight line horizontal with + that doesnt turn', () => {
         expect(line.line([
             [' ', ' ', ' ', ' ',' '],
             [' ', 'X', '+', 'X',' '],
@@ -99,23 +98,12 @@ describe('tests',()=> {
 
     test('Interrupted line Vertical should be false', () => {
         expect(line.line([
-            [
                 [ ' ', 'X', ' ', ' ' ],
                 [ ' ', '|', ' ', ' ' ],
                 [ ' ', '+', ' ', ' ' ],
                 [ ' ', 'X', ' ', ' ' ]
-            ]
+
         ])).toBe(false);
     });
 
-    test('Interrupted line Vertical should be false', () => {
-        expect(line.line([
-            [
-                [ ' ', 'X', ' ', ' ' ],
-                [ ' ', '|', ' ', ' ' ],
-                [ ' ', '+', ' ', ' ' ],
-                [ ' ', 'X', ' ', ' ' ]
-            ]
-        ])).toBe(false);
-    });
 })
