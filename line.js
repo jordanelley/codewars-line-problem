@@ -1,3 +1,5 @@
+
+
 const line = (grid) => {
     //todo check for unused characters
     //todo check + is a corner
@@ -20,7 +22,7 @@ const line = (grid) => {
     return false;
 }
 
-const continuePath = (X, Y, grid) =>{
+const continuePath = (X, Y, grid, turningCoordinates = null) =>{
     const surroundingCharsAllowed = getSurroundingCharsAllowed()
     const surroundingSquares = getSurroundingSquares(X,Y,grid)
 
@@ -30,12 +32,20 @@ const continuePath = (X, Y, grid) =>{
         if(allowedSymbols.includes(currentSurroundingSymbol)){
             if(currentSurroundingSymbol === 'X')
                 return true;
-            grid = wipeCurrentSquare(X,Y,grid) //so it doesnt get reused
+            grid = wipeCurrentSquare(X,Y,grid) //so it doesnt get reprocessed
             const newCoordinates= getNewCoordinates(X,Y,relativeDirectionToCurrentSquare)
             return continuePath(newCoordinates.X,newCoordinates.Y,grid);
         }
     }
     return false;
+}
+
+const findDisallowedAxisToFollowPlus =(previousCoordinates, plusCoordinates) => {
+    if(previousCoordinates.X === plusCoordinates.X)
+        return {X: plusCoordinates.X, Y: null}
+    if(previousCoordinates.Y !== plusCoordinates.Y)
+        console.error("coordinates are disconnected");
+    return {X: null, Y: plusCoordinates.Y}
 }
 
 const getSurroundingCharsAllowed = () => {return{
