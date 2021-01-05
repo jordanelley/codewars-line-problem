@@ -50,3 +50,6 @@ X--+        +--+
 
 
 `X-----|----X`
+
+
+see https://www.codewars.com/kata/59c5d0b0a25c8c99ca000237/train/javascript for more info
