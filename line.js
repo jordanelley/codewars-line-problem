@@ -1,3 +1,5 @@
+
+
 const line = (grid) => {
     //todo check for unused characters
     //todo check + is a corner
@@ -20,22 +22,42 @@ const line = (grid) => {
     return false;
 }
 
-const continuePath = (X, Y, grid) =>{
+const continuePath = (X, Y, grid, disallowedCoordinate = null) =>{
     const surroundingCharsAllowed = getSurroundingCharsAllowed()
     const surroundingSquares = getSurroundingSquares(X,Y,grid)
 
     for (const [relativeDirectionToCurrentSquare, currentSurroundingSymbol] of Object.entries(surroundingSquares)) {
         const symbol = grid[X][Y];
         const allowedSymbols = surroundingCharsAllowed[symbol][relativeDirectionToCurrentSquare];
-        if(allowedSymbols.includes(currentSurroundingSymbol)){
+        const newCoordinates= getNewCoordinates(X,Y,relativeDirectionToCurrentSquare)
+        if(allowedSymbols.includes(currentSurroundingSymbol) && notOnADisAllowedCoordinate(disallowedCoordinate,newCoordinates)){
             if(currentSurroundingSymbol === 'X')
                 return true;
-            grid = wipeCurrentSquare(X,Y,grid) //so it doesnt get reused
-            const newCoordinates= getNewCoordinates(X,Y,relativeDirectionToCurrentSquare)
-            return continuePath(newCoordinates.X,newCoordinates.Y,grid);
+            grid = wipeCurrentSquare(X,Y,grid) //so it doesnt get reprocessed
+            if(currentSurroundingSymbol === "+"){
+                return continuePath(newCoordinates.X,newCoordinates.Y,grid,findDisallowedAxisToFollowPlus({X:X,Y:Y},newCoordinates));
+            }
+            return continuePath(newCoordinates.X,newCoordinates.Y,grid);  //todo save path result so the loop can continue if fails
         }
     }
     return false;
+}
+
+const notOnADisAllowedCoordinate = (disallowedCoordinate,newCoordinates) => {
+    if(!disallowedCoordinate){
+        return true
+    }
+    return !(disallowedCoordinate.X === newCoordinates.X || disallowedCoordinate.Y === newCoordinates.Y);
+
+
+}
+
+const findDisallowedAxisToFollowPlus =(previousCoordinates, plusCoordinates) => {
+    if(previousCoordinates.X === plusCoordinates.X)
+        return {X: plusCoordinates.X, Y: null}
+    if(previousCoordinates.Y !== plusCoordinates.Y)
+        console.error("coordinates are disconnected");
+    return {X: null, Y: plusCoordinates.Y}
 }
 
 const getSurroundingCharsAllowed = () => {return{

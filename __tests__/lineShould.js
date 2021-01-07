@@ -79,6 +79,14 @@ describe('tests',()=> {
         ])).toBe(true);
     });
 
+    test('trick connecting line', () => {
+        expect(line.line([
+            ['X', '-', '+', ' ',' '],
+            [' ', '+', '+', '+','X'],
+            [' ', '+', '-', '+',' '],
+        ])).toBe(true);
+    });
+
     test('connecting lines 3', () => {
         expect(line.line([
             [ ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ' ],
