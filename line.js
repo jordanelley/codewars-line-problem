@@ -22,12 +22,25 @@ const line = (grid) => {
     return false;
 }
 
-const continuePath = (X, Y, grid, disallowedCoordinate = null) =>{
+const continuePath = (X, Y, grid,trailSoFar = [], disallowedCoordinate = null) =>{
     const surroundingCharsAllowed = getSurroundingCharsAllowed()
     const surroundingSquares = getSurroundingSquares(X,Y,grid)
+    let loopCount = 0;
+    let symbol = grid[X][Y];
+    if(grid[X][Y] === '^'){  //todo put this logic in funct
+        symbol = trailSoFar.pop()
+    }
+    else {
+        trailSoFar.push(symbol);
+    }
+    grid[X][Y] = symbol
+
+
+
 
     for (const [relativeDirectionToCurrentSquare, currentSurroundingSymbol] of Object.entries(surroundingSquares)) {
-        const symbol = grid[X][Y];
+        loopCount ++
+
         const allowedSymbols = surroundingCharsAllowed[symbol][relativeDirectionToCurrentSquare];
         const newCoordinates= getNewCoordinates(X,Y,relativeDirectionToCurrentSquare)
         if(allowedSymbols.includes(currentSurroundingSymbol) && notOnADisAllowedCoordinate(disallowedCoordinate,newCoordinates)){
@@ -37,11 +50,14 @@ const continuePath = (X, Y, grid, disallowedCoordinate = null) =>{
 
             let pathWorks = false;
             let disallowedAxis = null;
-            if(currentSurroundingSymbol === "+" || currentSurroundingSymbol === "+^"){
-                disallowedAxis = findDisallowedAxisToFollowPlus({X:X,Y:Y},newCoordinates);
+            if(currentSurroundingSymbol === "+"){
+                disallowedAxis = findAxisOfLine({X:X,Y:Y},newCoordinates);
             }
-            pathWorks = continuePath(newCoordinates.X,newCoordinates.Y,grid,disallowedAxis);
-            if(pathWorks === true){
+            // if(allSurroundingSquaresHaveBeenChecked(loopCount)){
+            //     grid[X][Y] = trailSoFar.pop();
+            // }
+            pathWorks = continuePath(newCoordinates.X,newCoordinates.Y,grid,trailSoFar,disallowedAxis);
+            if(pathWorks){
                 //todo check for extra chars
                 //else
                 return true
@@ -51,6 +67,11 @@ const continuePath = (X, Y, grid, disallowedCoordinate = null) =>{
     return false;
 }
 
+const allSurroundingSquaresHaveBeenChecked = (loopCount) =>{
+    const numOfSurroundingSquares = 4
+    return loopCount === numOfSurroundingSquares;
+}
+
 const notOnADisAllowedCoordinate = (disallowedCoordinate,newCoordinates) => {
     if(!disallowedCoordinate){
         return true
@@ -58,7 +79,7 @@ const notOnADisAllowedCoordinate = (disallowedCoordinate,newCoordinates) => {
     return !(disallowedCoordinate.X === newCoordinates.X || disallowedCoordinate.Y === newCoordinates.Y);
 }
 
-const findDisallowedAxisToFollowPlus =(previousCoordinates, plusCoordinates) => {
+const findAxisOfLine =(previousCoordinates, plusCoordinates) => {
     if(previousCoordinates.X === plusCoordinates.X)
         return {X: plusCoordinates.X, Y: null}
     if(previousCoordinates.Y !== plusCoordinates.Y)
