@@ -2,7 +2,7 @@
 
 const line = (grid) => {
     //todo check for unused characters
-    //todo check + is a corner
+    //todo continue checking other paths if one gets to a failing end
 
     grid = addPadding(grid);
 
@@ -34,10 +34,18 @@ const continuePath = (X, Y, grid, disallowedCoordinate = null) =>{
             if(currentSurroundingSymbol === 'X')
                 return true;
             grid = wipeCurrentSquare(X,Y,grid) //so it doesnt get reprocessed
-            if(currentSurroundingSymbol === "+"){
-                return continuePath(newCoordinates.X,newCoordinates.Y,grid,findDisallowedAxisToFollowPlus({X:X,Y:Y},newCoordinates));
+
+            let pathWorks = false;
+            let disallowedAxis = null;
+            if(currentSurroundingSymbol === "+" || currentSurroundingSymbol === "+^"){
+                disallowedAxis = findDisallowedAxisToFollowPlus({X:X,Y:Y},newCoordinates);
             }
-            return continuePath(newCoordinates.X,newCoordinates.Y,grid);  //todo save path result so the loop can continue if fails
+            pathWorks = continuePath(newCoordinates.X,newCoordinates.Y,grid,disallowedAxis);
+            if(pathWorks === true){
+                //todo check for extra chars
+                //else
+                return true
+            }
         }
     }
     return false;
@@ -48,8 +56,6 @@ const notOnADisAllowedCoordinate = (disallowedCoordinate,newCoordinates) => {
         return true
     }
     return !(disallowedCoordinate.X === newCoordinates.X || disallowedCoordinate.Y === newCoordinates.Y);
-
-
 }
 
 const findDisallowedAxisToFollowPlus =(previousCoordinates, plusCoordinates) => {
@@ -63,28 +69,28 @@ const findDisallowedAxisToFollowPlus =(previousCoordinates, plusCoordinates) => 
 const getSurroundingCharsAllowed = () => {return{
     '-':{
         up: [],
-            down: [],
-            left: ['-','+','X'],
-            right: ['-','+','X']
+        down: [],
+        left: ['-','+','X'],
+        right: ['-','+','X']
     },
     '|':{
         up: ['|','+','X'],
-            down: ['|','+','X'],
-            left: [],
-            right: []
+        down: ['|','+','X'],
+        left: [],
+        right: []
     },
     '+':{
         up: ['|','+','X'],
-            down: ['|','+','X'],
-            left: ['-','+','X'],
-            right: ['-','+','X']
+        down: ['|','+','X'],
+        left: ['-','+','X'],
+        right: ['-','+','X']
     },
     'X':{
         up: ['|','+','X'],
-            down: ['|','+','X'],
-            left: ['-','+','X'],
-            right: ['-','+','X']
-    }
+        down: ['|','+','X'],
+        left: ['-','+','X'],
+        right: ['-','+','X']
+    },
 }}
 
 const getNewCoordinates = (X,Y, direction) =>{
@@ -98,7 +104,7 @@ const getNewCoordinates = (X,Y, direction) =>{
 }
 
 const wipeCurrentSquare = (X,Y,grid) => {
-    grid[X][Y]= '^'
+    grid[X][Y]='^'
     return grid;
 }
 
