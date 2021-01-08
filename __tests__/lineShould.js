@@ -79,13 +79,27 @@ describe('tests',()=> {
         ])).toBe(true);
     });
 
-    test('trick connecting line', () => {
+    test('tricky connecting line', () => {
         expect(line.line([
             ['X', '-', '+', ' ',' '],
             [' ', '+', '+', '+','X'],
             [' ', '+', '-', '+',' '],
         ])).toBe(true);
     });
+     test('tricky connecting line 2', () => {
+            expect(line.line([
+                ['X', '-', '+', ' ',' '],
+                ['X', '+', '+', '+',' '],
+                [' ', '+', '-', '+',' '],
+            ])).toBe(true);
+        });
+     test('tricky connecting line 3', () => {
+            expect(line.line([
+                ['X', '-', '+', ' ',' '],
+                ['X', ' ', '+', '+',' '],
+                [' ', '+', '-', '+',' '],
+            ])).toBe(false);
+        });
 
     test('connecting lines 3', () => {
         expect(line.line([
